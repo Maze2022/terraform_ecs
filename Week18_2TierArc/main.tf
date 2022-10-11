@@ -206,11 +206,11 @@ resource "aws_instance" "Pub2a_ec2" {
 
   user_data = <<-EOF
     #!/bin/bash
-    sudo yum update -y
-    sudo yum install -y httpd
-    sudo systemctl start httpd
-    sudo systemctl enable httpd
-    sudo echo "<h1>Code finally Worked.EC2 instance launched in us-west-2a!!!</h1>" > var/www/html/index.html
+    yum update -y
+    yum install -y httpd
+    systemctl start httpd
+    systemctl enable httpd
+    echo "<h1>Code finally Worked.EC2 instance launched in us-west-2a!!!</h1>" > var/www/html/index.html
     EOF
 
 }
@@ -224,11 +224,11 @@ resource "aws_instance" "Pub2b_ec2" {
 
   user_data = <<-EOF
     #!/bin/bash
-    sudo yum update -y
-    sudo yum install -y httpd
-    sudo systemctl start httpd
-    sudo systemctl enable httpd
-    sudo echo "<h1>Code finally Worked.EC2 instance launched in us-west-2b!!!</h1>" > var/www/html/index.html
+    yum update -y
+    yum install -y httpd
+    systemctl start httpd
+    systemctl enable httpd
+    echo "<h1>Code finally Worked.EC2 instance launched in us-west-2b!!!</h1>" > var/www/html/index.html
     EOF
 }
 
@@ -251,5 +251,4 @@ resource "aws_db_instance" "db_instance" {
 resource "aws_db_subnet_group" "db_sub_grp" {
   name       = "db_sub_grp"
   subnet_ids = [aws_subnet.db_private_sub2a.id, aws_subnet.Private_sub2b.id]
-
 }
