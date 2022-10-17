@@ -1,4 +1,3 @@
-
 resource "aws_vpc" "ecs_vpc" {
   cidr_block       = var.cidr_block
   instance_tenancy = "default"
