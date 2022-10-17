@@ -20,7 +20,7 @@ module "ecs-fargate" {
 
   name_prefix        = "my_ecs-fargate"
   vpc_id             = aws_vpc.ecs_vpc.id
-  private_subnet_ids = ["aws_subnet.Private_subnet_1a.id", "aws_subnet.Private_subnet_1b.id"]
+  private_subnet_ids = [aws_subnet.Private_subnet_2a.id, aws_subnet.Private_subnet_2b.id]
 
   cluster_id = aws_ecs_cluster.my_cluster.id
 
