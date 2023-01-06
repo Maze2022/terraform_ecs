@@ -1,36 +1,16 @@
-resource "null_resource" "dockervol" {
-  provisioner "local-exec" {
-    command = "mkdir noderedvol/ || true && sudo chown -R 1000:1000 noderedvol/"
-  }
-}
-
 module "image" {
-  source = "./image"
-  image_in = var.image[terraform.workspace]
+  source   = "./image"
+  for_each = local.deployment
+  image_in = each.value.image
 }
 
-resource "docker_image" "nodered_image" {
-  name = var.image[terraform.workspace]
+module "container" {
+  source            = "./container"
+  count_in          = each.value.container_count
+  for_each          = local.deployment
+  name_in           = each.key
+  image_in          = module.image[each.key].image_out
+  int_port_in       = each.value.int
+  ext_port_in       = each.value.ext
+  container_path_in = each.value.container_path
 }
-
-resource "random_string" "random" {
-  count   = local.container_count
-  length  = 4
-  special = false
-  upper   = false
-}
-
-resource "docker_container" "nodered_container" {
-  count = local.container_count
-  name  = join("-", ["nodered", terraform.workspace, random_string.random[count.index].result])
-  image = module.image.image_out
-  ports {
-    internal = var.int_port
-    external = var.ext_port[terraform.workspace][count.index]
-  }
-  volumes {
-    container_path = "/data"
-    host_path      = "${path.cwd}/noderedvol"
-  }
-}
-
